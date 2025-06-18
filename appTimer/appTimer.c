@@ -160,7 +160,7 @@ static bool DisplayIst(time_t now)
     DATE_TIME istTime;
     if (!EpochToUtc(now + IST_OFFSET_SECONDS, &istTime))
     {
-        printf("UTC conversion failed!\n\n");
+        printf("IST conversion failed!\n\n");
         return false;
     }
     
@@ -186,7 +186,7 @@ static bool DisplayPst(time_t now)
 
     if (!EpochToUtc(now + PST_OFFSET_SECONDS, &pstTime))
     {
-        printf("UTC conversion failed!\n\n");
+        printf("PST conversion failed!\n\n");
         return false;
     }
     
@@ -203,7 +203,7 @@ static bool DisplayPst(time_t now)
 // Outputs  : Prints the formatted time for UTC, IST, and PST.
 // Return   : None
 // Notes    : Retrieves the current system time using time(NULL).
-//            Calls display_gmt(), display_ist(), and display_pst() sequentially.
+//            Calls DisplayUtc(), DisplayIst(), and DisplayPst() sequentially.
 //*****************************************************************************
 void DisplayTimeAllZones(void)
 {

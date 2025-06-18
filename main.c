@@ -13,7 +13,6 @@
 
 //***************************** Include Files *********************************
 #include <stdio.h>
-#include <windows.h> 
 #include "appTimer/appTimer.h"
 
 //***************************** Local Types ***********************************
@@ -37,7 +36,6 @@ int main(void)
         system("cls"); 
         DisplayTimeAllZones();
         fflush(stdout);
-        Sleep(1000); 
     }
     return 0;
 }
