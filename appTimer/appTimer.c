@@ -53,7 +53,7 @@ static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
 
     int32 lDays = (int32)(epochSeconds / SECONDS_PER_DAY);
     int32 lSecs = (int32)(epochSeconds % SECONDS_PER_DAY);
-    int16 nYear = 1970;
+    int16 nYear = EPOCH_YEAR;
     int8  cMonth = 0;
 
     pDateTime->cHour = (int8)(lSecs / SECONDS_PER_HOUR);
@@ -62,7 +62,7 @@ static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
 
     while (1)
     {
-        int32 lDaysThisYear = IsLeapYear(nYear) ? 366 : 365;
+        int32 lDaysThisYear = IsLeapYear(nYear) ? LEAP_YEAR : NON_LEAP_YEAR;
         if (lDays >= lDaysThisYear)
         {
             lDays -= lDaysThisYear;
@@ -112,11 +112,11 @@ static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
 static void PrintTimeAndDate(const DATE_TIME* pDateTime)
 {
     int8 cHour12 = pDateTime->cHour % HOUR_CYCLE;
-    if (cHour12 == 0)
+    if (0 == cHour12)
     {
         cHour12 = HOUR_CYCLE;
     }
-    const char* pAmPm = (pDateTime->cHour < 12) ? "AM" : "PM";
+    const char* pAmPm = (pDateTime->cHour < HOUR_CYCLE) ? "AM" : "PM";
 
     printf("Time : %02d:%02d:%02d %s\n", cHour12, pDateTime->cMinute, 
                                          pDateTime->cSecond, pAmPm);

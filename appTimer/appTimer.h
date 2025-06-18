@@ -28,6 +28,9 @@
 #define LEAP_YEAR_DIVISIBLE_BY_4      4
 #define LEAP_YEAR_DIVISIBLE_BY_100    100
 #define LEAP_YEAR_DIVISIBLE_BY_400    400
+#define EPOCH_YEAR                    1970
+#define LEAP_YEAR                     366
+#define NON_LEAP_YEAR                 365
 
 
 typedef unsigned char  uint8;
