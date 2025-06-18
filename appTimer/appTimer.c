@@ -27,7 +27,9 @@
 //*****************************************************************************
 static uint8 IsLeapYear(int16 year)
 {
-    return ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)));
+    return ((year % LEAP_YEAR_DIVISIBLE_BY_4 == 0) && 
+            ((year % LEAP_YEAR_DIVISIBLE_BY_100 != 0) || 
+            (year % LEAP_YEAR_DIVISIBLE_BY_400 == 0)));
 }
 
 //*****************************.EpochToUtc.************************************
@@ -44,54 +46,55 @@ static uint8 IsLeapYear(int16 year)
 //*****************************************************************************
 static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
 {
-    if (epochSeconds < 0 || pDateTime == NULL) {
+    if (epochSeconds < 0 || pDateTime == NULL) 
+    {
         return false; 
     }
 
-    int32 days = (int32)(epochSeconds / SECONDS_PER_DAY);
-    int32 secs = (int32)(epochSeconds % SECONDS_PER_DAY);
-    int16 year = 1970;
-    int8 month = 0;
+    int32 lDays = (int32)(epochSeconds / SECONDS_PER_DAY);
+    int32 lSecs = (int32)(epochSeconds % SECONDS_PER_DAY);
+    int16 nYear = 1970;
+    int8  cMonth = 0;
 
-    pDateTime->hour = (int8)(secs / SECONDS_PER_HOUR);
-    pDateTime->minute = (int8)((secs % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
-    pDateTime->second = (int8)(secs % SECONDS_PER_MINUTE);
+    pDateTime->cHour = (int8)(lSecs / SECONDS_PER_HOUR);
+    pDateTime->cMinute = (int8)((lSecs % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+    pDateTime->cSecond = (int8)(lSecs % SECONDS_PER_MINUTE);
 
     while (1)
     {
-        int32 daysThisYear = IsLeapYear(year) ? 366 : 365;
-        if (days >= daysThisYear)
+        int32 lDaysThisYear = IsLeapYear(nYear) ? 366 : 365;
+        if (lDays >= lDaysThisYear)
         {
-            days -= daysThisYear;
-            year++;
+            lDays -= lDaysThisYear;
+            nYear++;
         }
         else
         {
             break;
         }
     }
-    pDateTime->year = year;
+    pDateTime->nYear = nYear;
 
-    month = 0;
+    cMonth = 0;
     while (1)
     {
-        int8 dim = DAYS_IN_MONTH[month];
-        if ((month == 1) && IsLeapYear(year))
+        int8 cDim = DAYS_IN_MONTH[cMonth];
+        if ((cMonth == 1) && IsLeapYear(nYear))
         {
-            dim++;
+            cDim++;
         }
-        else if (days >= dim)
+        else if (lDays >= cDim)
         {
-            days -= dim;
-            month++;
+            lDays -= cDim;
+            cMonth++;
         }
         else
         {
             break;
         }
     }
-    pDateTime->month = month + 1;
-    pDateTime->day = days + 1;
+    pDateTime->cMonth = cMonth + 1;
+    pDateTime->cDay = lDays + 1;
 
     return true; 
 }
@@ -108,17 +111,17 @@ static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
 //*****************************************************************************
 static void PrintTimeAndDate(const DATE_TIME* pDateTime)
 {
-    int8 hour12 = pDateTime->hour % HOUR_CYCLE;
-    if (hour12 == 0)
+    int8 cHour12 = pDateTime->cHour % HOUR_CYCLE;
+    if (cHour12 == 0)
     {
-        hour12 = HOUR_CYCLE;
+        cHour12 = HOUR_CYCLE;
     }
-    const char* pAmPm = (pDateTime->hour < 12) ? "AM" : "PM";
+    const char* pAmPm = (pDateTime->cHour < 12) ? "AM" : "PM";
 
-    printf("Time : %02d:%02d:%02d %s\n", hour12, pDateTime->minute, 
-                                         pDateTime->second, pAmPm);
-    printf("Date : %02d/%02d/%04d\n", pDateTime->day, pDateTime->month,
-                                         pDateTime->year);
+    printf("Time : %02d:%02d:%02d %s\n", cHour12, pDateTime->cMinute, 
+                                         pDateTime->cSecond, pAmPm);
+    printf("Date : %02d/%02d/%04d\n", pDateTime->cDay, pDateTime->cMonth,
+                                         pDateTime->nYear);
 }
 
 //*****************************.DisplayGmt.*************************************

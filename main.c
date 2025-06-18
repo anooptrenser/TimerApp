@@ -32,11 +32,12 @@
 //*****************************************************************************
 int main(void)
 {
-    while (1) {
-        system("cls"); 
+    while (1)
+    {
         DisplayTimeAllZones();
         fflush(stdout);
     }
+
     return 0;
 }
 
