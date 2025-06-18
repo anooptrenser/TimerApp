@@ -73,12 +73,13 @@ static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
             break;
         }
     }
+
     pDateTime->nYear = nYear;
 
-    cMonth = 0;
     while (1)
     {
         int8 cDim = DAYS_IN_MONTH[cMonth];
+        
         if ((cMonth == 1) && IsLeapYear(nYear))
         {
             cDim++;
@@ -93,6 +94,7 @@ static bool EpochToUtc(time_t epochSeconds, DATE_TIME* pDateTime)
             break;
         }
     }
+
     pDateTime->cMonth = cMonth + 1;
     pDateTime->cDay = lDays + 1;
 
