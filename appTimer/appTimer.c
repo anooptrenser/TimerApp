@@ -51,19 +51,19 @@ static bool EpochToUtc(time_t lepochSeconds, DATE_TIME* pDateTime)
 {
     bool blResult = false; 
     int8 cMonth = 0;
-    (void)cDaysInMonth ;  //To resolve static analysis issue
+    int8 cDaysInMonth = 0;
 
     int32 lDays = (lepochSeconds / SECONDS_PER_DAY);
     int32 lSecs = (lepochSeconds % SECONDS_PER_DAY);
     int16 nYear = EPOCH_YEAR;
 
-    pDateTime->cHour = (int8)(lSecs / SECONDS_PER_HOUR);
-    pDateTime->cMinute = (int8)((lSecs % SECONDS_PER_HOUR) /
-                                 SECONDS_PER_MINUTE);
-    pDateTime->cSecond = (int8)(lSecs % SECONDS_PER_MINUTE);
-
     if (lepochSeconds > 0 && pDateTime != NULL)
     {
+        pDateTime->cHour = (int8)(lSecs / SECONDS_PER_HOUR);
+        pDateTime->cMinute = (int8)((lSecs % SECONDS_PER_HOUR)
+                                    / SECONDS_PER_MINUTE);
+        pDateTime->cSecond = (int8)(lSecs % SECONDS_PER_MINUTE);
+        
         while (lDays >= (IsLeapYear(nYear) ? LEAP_YEAR : NON_LEAP_YEAR)) 
         {
             lDays -= (IsLeapYear(nYear) ? LEAP_YEAR : NON_LEAP_YEAR);
@@ -82,7 +82,6 @@ static bool EpochToUtc(time_t lepochSeconds, DATE_TIME* pDateTime)
 
         pDateTime->cMonth = cMonth + 1;
         pDateTime->cDay = lDays + 1;
-
         blResult = true;
     }
     
