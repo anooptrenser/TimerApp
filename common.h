@@ -4,7 +4,7 @@
 //*****************************************************************************
 //
 // File     : common.h
-// Summary  : appTimer Header file
+// Summary  : Global types used in the app
 // Note     : None
 // Author   : Anoop G
 // Date     : 17/06/2025

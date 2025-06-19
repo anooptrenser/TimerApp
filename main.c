@@ -1,10 +1,10 @@
-//**************************** Sample program *********************************
+//**************************** Timer Application Program *********************************
 // Copyright (c) 2025 Trenser Technology Solutions
 // All Rights Reserved
 //*****************************************************************************
 //
 // File     : main.c
-// Summary  : Calculate time
+// Summary  : Calculate real time of different zones
 // Note     : None
 // Author   : Anoop G
 // Date     : 17/06/2025

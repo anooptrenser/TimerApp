@@ -52,11 +52,12 @@ static bool EpochToUtc(time_t lepochSeconds, DATE_TIME* pDateTime)
     bool blResult = false; 
     int8 cMonth = 0;
     int8 cDaysInMonth = 0;
+    (void)cDaysInMonth;
 
     int32 lDays = (lepochSeconds / SECONDS_PER_DAY);
     int32 lSecs = (lepochSeconds % SECONDS_PER_DAY);
     int16 nYear = EPOCH_YEAR;
-
+    
     if (lepochSeconds > 0 && pDateTime != NULL)
     {
         pDateTime->cHour = (int8)(lSecs / SECONDS_PER_HOUR);

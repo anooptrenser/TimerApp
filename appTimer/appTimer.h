@@ -26,9 +26,11 @@
 #define IST_OFFSET_SECONDS            19800   // +5:30 in seconds
 #define PST_OFFSET_SECONDS           -28800   // -8:00 in seconds
 #define HOUR_CYCLE                    12
+
 #define LEAP_YEAR_DIVISIBLE_BY_4      4
 #define LEAP_YEAR_DIVISIBLE_BY_100    100
 #define LEAP_YEAR_DIVISIBLE_BY_400    400
+
 #define EPOCH_YEAR                    1970
 #define LEAP_YEAR                     366
 #define NON_LEAP_YEAR                 365
