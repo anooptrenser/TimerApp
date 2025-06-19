@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "apptimer.h": "c",
+        "common.h": "c"
+    }
+}

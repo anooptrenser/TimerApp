@@ -10,14 +10,15 @@
 // Date     : 17/06/2025
 //
 //*****************************************************************************
-
-#ifndef APPTIMER_H
-#define APPTIMER_H
+#ifndef _APPTIMER_H_
+#define _APPTIMER_H_
 
 //***************************** Include Files *********************************
 #include <time.h>
+#include <stdbool.h>
+#include "common.h"
 
-//****************************** Constants **********************************
+//****************************** Constants ************************************
 #define SECONDS_PER_DAY               86400
 #define SECONDS_PER_HOUR              3600
 #define SECONDS_PER_MINUTE            60
@@ -31,13 +32,9 @@
 #define EPOCH_YEAR                    1970
 #define LEAP_YEAR                     366
 #define NON_LEAP_YEAR                 365
+#define MONTHS                        12
 
-
-typedef unsigned char  uint8;
-typedef signed char    int8;
-typedef signed short   int16;
-typedef signed long    int32;
-
+//******************************* Global Types ******************************** 
 typedef struct _DATE_TIME_
 {
     int16 nYear;
@@ -48,10 +45,13 @@ typedef struct _DATE_TIME_
     int8  cSecond;
 } DATE_TIME;
 
-static const int8 DAYS_IN_MONTH[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+static const int8 DAYS_IN_MONTH[MONTHS] = {31, 28, 31, 30, 31, 30,
+                                            31, 31, 30, 31, 30, 31};
+
 //***************************** Function Declarations **************************
-void DisplayTimeAllZones(void);
+bool DisplayTimeAllZones(void);
+void ClearScreen(void);
+void DelayMilliseconds(uint32 ulMilliseconds);
 
-#endif 
-
+#endif //_APPTIMER_H_
 // EOF

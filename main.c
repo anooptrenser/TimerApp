@@ -34,8 +34,10 @@ int main(void)
 {
     while (1)
     {
+        ClearScreen();
         DisplayTimeAllZones();
         fflush(stdout);
+        DelayMilliseconds(1000);
     }
 
     return 0;
