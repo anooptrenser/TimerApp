@@ -36,6 +36,10 @@
 #define NON_LEAP_YEAR                 365
 #define MONTHS                        12
 
+#define DAYS_31                       31
+#define DAYS_30                       30
+#define DAYS_28                       28
+
 //******************************* Global Types ******************************** 
 typedef struct _DATE_TIME_
 {
@@ -47,8 +51,10 @@ typedef struct _DATE_TIME_
     int8  cSecond;
 } DATE_TIME;
 
-static const int8 DAYS_IN_MONTH[MONTHS] = {31, 28, 31, 30, 31, 30,
-                                            31, 31, 30, 31, 30, 31};
+static const int8 DAYS_IN_MONTH[MONTHS] = {DAYS_31, DAYS_28, DAYS_31, DAYS_30, 
+                                           DAYS_31, DAYS_30,
+                                           DAYS_31, DAYS_31, DAYS_30, DAYS_31,
+                                           DAYS_30, DAYS_31};
 
 //***************************** Function Declarations **************************
 bool DisplayTimeAllZones(void);
