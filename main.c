@@ -13,7 +13,7 @@
 
 //***************************** Include Files *********************************
 #include <stdio.h>
-#include "appTimer/appTimer.h"
+#include "appTimer.h"
 
 //***************************** Local Types ***********************************
 
