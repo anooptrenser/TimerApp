@@ -22,17 +22,17 @@
 
 //*****************************.IsLeap.****************************************
 //Purpose : Determines if a given year is a leap year.
-//Inputs  : year - The year to check.
+//Inputs  : nYear - The year to check.
 //Outputs : None
 //Return  : Returns 1 if the year is a leap year, otherwise 0.
 //Notes   : Uses standard leap year rules:
 //          Divisible by 4 AND (not divisible by 100 OR divisible by 400).
 //*****************************************************************************
-static uint8 IsLeapYear(int16 nyear)
+static uint8 IsLeapYear(int16 nYear)
 {
-    return ((nyear % LEAP_YEAR_DIVISIBLE_BY_4 == 0) && 
-            ((nyear % LEAP_YEAR_DIVISIBLE_BY_100 != 0) || 
-            (nyear % LEAP_YEAR_DIVISIBLE_BY_400 == 0)));
+    return ((nYear % LEAP_YEAR_DIVISIBLE_BY_4 == 0) && 
+            ((nYear % LEAP_YEAR_DIVISIBLE_BY_100 != 0) || 
+            (nYear % LEAP_YEAR_DIVISIBLE_BY_400 == 0)));
 }
 
 //*****************************.EpochToUtc.************************************
@@ -41,7 +41,7 @@ static uint8 IsLeapYear(int16 nyear)
 // Inputs   : lepochSeconds - The number of seconds since Unix epoch.
 //            pDateTime - Pointer to a DateTime structure to store the
 //            result.
-// Outputs  : None
+// Outputs  : pDateTime - Populated with the converted UTC date/time 
 // Return   : blResult  - 1 for success and 0 for failure
 // Notes    : Uses leap year calculations to determine year and month.
 //            Handles conversion of hours, minutes, and seconds from epoch 
@@ -52,11 +52,11 @@ static bool EpochToUtc(time_t lepochSeconds, DATE_TIME* pDateTime)
     bool blResult = false; 
     int8 cMonth = 0;
     int8 cDaysInMonth = 0;
-    (void)cDaysInMonth;
-
     int32 lDays = (lepochSeconds / SECONDS_PER_DAY);
     int32 lSecs = (lepochSeconds % SECONDS_PER_DAY);
     int16 nYear = EPOCH_YEAR;
+
+    (void)cDaysInMonth;
     
     if (lepochSeconds > 0 && pDateTime != NULL)
     {
@@ -94,7 +94,7 @@ static bool EpochToUtc(time_t lepochSeconds, DATE_TIME* pDateTime)
 //            the date in "DD/MM/YYYY" format.
 // Inputs   : pDateTime - Pointer to a DateTime structure containing
 //            the time and date to print.
-// Outputs  : Prints the formatted time and date to the standard output.
+// Outputs  : None
 // Return   : None
 // Notes    : Converts 24-hour format to 12-hour format with AM/PM notation.
 //            Pads hour, minute, and second values to ensure two-digit display.
@@ -118,7 +118,7 @@ static void PrintTimeAndDate(const DATE_TIME* pDateTime)
 //*****************************.DisplayGmt.*************************************
 // Purpose  : Displays the current time in UTC (Coordinated Universal Time).
 // Inputs   : lNow - The current epoch time.
-// Outputs  : Prints the formatted UTC time and epoch value to standard output.
+// Outputs  : None
 // Return   : blResult  - 1 for success and 0 for failure
 // Notes    : Converts epoch time to UTC using EpochToUtc().
 //            Uses PrintTimeAndDate() for formatted output.
@@ -146,7 +146,7 @@ static bool DisplayUtc(time_t lNow)
 //*****************************.DisplayIst.*************************************
 // Purpose  : Displays the current time in IST (Indian Standard Time, UTC+05:30).
 // Inputs   : lNow - The current epoch time.
-// Outputs  : Prints the formatted IST time to standard output.
+// Outputs  : None
 // Return   : blResult  - 1 for success and 0 for failure
 // Notes    : Converts epoch time to IST using IST_OFFSET.
 //            Uses EpochToUtc() for UTC conversion before applying offset.
@@ -173,9 +173,10 @@ static bool DisplayIst(time_t lNow)
 }
 
 //*****************************.DisplayPst.*************************************
-// Purpose  : Displays the current time in PST (Pacific Standard Time, UTC-08:00).
+// Purpose  : Displays the current time in PST
+//            (Pacific Standard Time, UTC-08:00).
 // Inputs   : lNow - The current epoch time.
-// Outputs  : Prints the formatted PST time to standard output.
+// Outputs  : None
 // Return   : blResult  - 1 for success and 0 for failure
 // Notes    : Converts epoch time to PST using PST_OFFSET.
 //            Uses EpochToUtc() for UTC conversion before applying offset.
@@ -204,7 +205,7 @@ static bool DisplayPst(time_t lNow)
 //*****************************.DisplayTimeAllZones.*************************
 // Purpose  : Displays the current time in multiple time zones (UTC, IST, PST).
 // Inputs   : None
-// Outputs  : Prints the formatted time for UTC, IST, and PST.
+// Outputs  : None
 // Return   : blResult  - 1 for success and 0 for failure
 // Notes    : Retrieves the current system time using time(NULL).
 //            Calls DisplayUtc(), DisplayIst(), and DisplayPst() sequentially.
@@ -235,7 +236,7 @@ void ClearScreen(void)
     printf("\x1b[2J\x1b[H");
 }
 
-//******************************.FUNCTION_HEADER.******************************
+//******************************.DelayMilliseconds.******************************
 // Purpose  : Delays program execution for a specified number of milliseconds.
 // Inputs   : ulMilliseconds - Number of milliseconds to delay.
 // Outputs  : None

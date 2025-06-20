@@ -1,10 +1,10 @@
-//**************************** Timer Application Program *********************************
+//**************************** Timer Application Program **********************
 // Copyright (c) 2025 Trenser Technology Solutions
 // All Rights Reserved
 //*****************************************************************************
 //
 // File     : main.c
-// Summary  : Calculate real time of different zones
+// Summary  : Displays real time of different zones
 // Note     : None
 // Author   : Anoop G
 // Date     : 17/06/2025
@@ -42,6 +42,5 @@ int main(void)
 
     return 0;
 }
-
 
 // EOF
