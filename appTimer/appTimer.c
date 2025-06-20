@@ -101,21 +101,34 @@ static bool EpochToUtc(time_t lepochSeconds, DATE_TIME* pDateTime)
 //*****************************************************************************
 static void PrintTimeAndDate(const DATE_TIME* pDateTime)
 {
-    int8 cHour12 = pDateTime->cHour % HOUR_CYCLE;
-    const char* pAmPm = (pDateTime->cHour < HOUR_CYCLE) ? "AM" : "PM";
+    int8 cHour12 = 0;
+    const char* pAmPm = NULL;
 
-    if (0 == cHour12)
+    if (pDateTime != NULL)
     {
-        cHour12 = HOUR_CYCLE;
-    }
+        cHour12 = pDateTime->cHour % HOUR_CYCLE;
+        pAmPm = (pDateTime->cHour < HOUR_CYCLE) ? "AM" : "PM";
 
-    printf("Time : %02d:%02d:%02d %s\n", cHour12, pDateTime->cMinute, 
-                                         pDateTime->cSecond, pAmPm);
-    printf("Date : %02d/%02d/%04d\n", pDateTime->cDay, pDateTime->cMonth,
-                                         pDateTime->nYear);
+        if (0 == cHour12)
+        {
+            cHour12 = HOUR_CYCLE;
+        }
+
+        printf("Time : %02d:%02d:%02d %s\n", cHour12, pDateTime->cMinute, 
+                                             pDateTime->cSecond, pAmPm);
+        printf("Date : %02d/%02d/%04d\n", pDateTime->cDay, pDateTime->cMonth,
+                                             pDateTime->nYear);
+
+    }
+    else
+    {
+        printf("Invalid date/time pointer!\n");
+        return;
+    }
+    
 }
 
-//*****************************.DisplayGmt.*************************************
+//*****************************.DisplayGmt.************************************
 // Purpose  : Displays the current time in UTC (Coordinated Universal Time).
 // Inputs   : lNow - The current epoch time.
 // Outputs  : None
@@ -143,8 +156,9 @@ static bool DisplayUtc(time_t lNow)
     return blResult;
 }
 
-//*****************************.DisplayIst.*************************************
-// Purpose  : Displays the current time in IST (Indian Standard Time, UTC+05:30).
+//*****************************.DisplayIst.************************************
+// Purpose  : Displays the current time in IST (Indian Standard Time, 
+//            UTC+05:30)
 // Inputs   : lNow - The current epoch time.
 // Outputs  : None
 // Return   : blResult  - 1 for success and 0 for failure
@@ -172,7 +186,7 @@ static bool DisplayIst(time_t lNow)
     return blResult;
 }
 
-//*****************************.DisplayPst.*************************************
+//*****************************.DisplayPst.************************************
 // Purpose  : Displays the current time in PST
 //            (Pacific Standard Time, UTC-08:00).
 // Inputs   : lNow - The current epoch time.
@@ -202,8 +216,9 @@ static bool DisplayPst(time_t lNow)
     return blResult;
 }
 
-//*****************************.DisplayTimeAllZones.*************************
-// Purpose  : Displays the current time in multiple time zones (UTC, IST, PST).
+//*****************************.DisplayTimeAllZones.***************************
+// Purpose  : Displays the current time in multiple time zones 
+//            (UTC, IST, PST).
 // Inputs   : None
 // Outputs  : None
 // Return   : blResult  - 1 for success and 0 for failure
@@ -225,7 +240,7 @@ bool DisplayTimeAllZones(void)
     return blResult;
 }
 
-//******************************.ClearScreen.******************************
+//******************************.ClearScreen.**********************************
 // Purpose  : Clears the console screen using ANSI escape sequences.
 // Inputs   : None
 // Outputs  : None
@@ -236,7 +251,7 @@ void ClearScreen(void)
     printf("\x1b[2J\x1b[H");
 }
 
-//******************************.DelayMilliseconds.******************************
+//******************************.DelayMilliseconds.****************************
 // Purpose  : Delays program execution for a specified number of milliseconds.
 // Inputs   : ulMilliseconds - Number of milliseconds to delay.
 // Outputs  : None
