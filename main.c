@@ -1,10 +1,10 @@
-//**************************** Sample program *********************************
+//**************************** Timer Application Program **********************
 // Copyright (c) 2025 Trenser Technology Solutions
 // All Rights Reserved
 //*****************************************************************************
 //
 // File     : main.c
-// Summary  : Print "Hello World"
+// Summary  : Displays real time of different zones
 // Note     : None
 // Author   : Anoop G
 // Date     : 17/06/2025
@@ -13,6 +13,7 @@
 
 //***************************** Include Files *********************************
 #include <stdio.h>
+#include "appTimer.h"
 
 //***************************** Local Types ***********************************
 
@@ -23,15 +24,21 @@
 //***************************** Local Functions *******************************
 
 //*****************************.main.******************************************
-// Purpose   : Print "Hello World"
+// Purpose   : Display time of all zones
 // Inputs    : None 
 // Outputs   : None
 // Return    : 0
 // Notes     : None
 //*****************************************************************************
-int main()
+int main(void)
 {
-    printf("Hello, World!\n");
+    while (1)
+    {
+        ClearScreen();
+        DisplayTimeAllZones();
+        fflush(stdout);
+        DelayMilliseconds(1000);
+    }
 
     return 0;
 }
