@@ -56,7 +56,7 @@ static const int8 DAYS_IN_MONTH[MONTHS] = {DAYS_31, DAYS_28, DAYS_31, DAYS_30,
                                            DAYS_31, DAYS_31, DAYS_30, DAYS_31,
                                            DAYS_30, DAYS_31};
 
-//***************************** Function Declarations **************************
+//***************************** Function Declarations *************************
 bool DisplayTimeAllZones(void);
 void ClearScreen(void);
 void DelayMilliseconds(uint32 ulMilliseconds);
