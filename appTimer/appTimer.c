@@ -104,6 +104,8 @@ static void PrintTimeAndDate(const DATE_TIME* pDateTime)
     int8 cHour12 = 0;
     const char* pAmPm = NULL;
 
+    (void)cHour12; //Static analysis resolve
+
     if (pDateTime != NULL)
     {
         cHour12 = pDateTime->cHour % HOUR_CYCLE;
