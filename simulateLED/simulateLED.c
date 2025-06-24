@@ -26,9 +26,9 @@
 //*****************************************************************************
 void DisplayLedStatus(void)
 {
-    static bool blLedOn = false; // Static variable to maintain state
+    static bool stblLedOn = false; // Static variable to maintain state
 
-    if (blLedOn)
+    if (stblLedOn)
     {
         printf("LED ON\n");
     }
@@ -37,7 +37,7 @@ void DisplayLedStatus(void)
         printf("LED OFF\n");
     }
 
-    blLedOn = !blLedOn; // Toggle state for next call
+    stblLedOn = !stblLedOn; // Toggle state for next call
 }
 
 // EOF
