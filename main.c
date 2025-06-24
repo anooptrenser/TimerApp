@@ -14,7 +14,6 @@
 //***************************** Include Files *********************************
 #include <stdio.h>
 #include "appTimer.h"
-#include "simulateLED.h"
 
 //***************************** Local Types ***********************************
 
@@ -37,8 +36,6 @@ int main(void)
     {
         ClearScreen();
         DisplayTimeAllZones();
-        printf("-------------------------\n"); // Separator for clarity
-        DisplayLedStatus(); // Simulate LED ON/OFF
         fflush(stdout);
         DelayMilliseconds(1000);
     }
