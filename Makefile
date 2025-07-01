@@ -1,83 +1,73 @@
-# TimerApp Makefile (auto-creates subdirectories)
-
+# Directories and source files
 SRC_DIRS := . appTimer simulateLED
 SRCS := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-REL_SRCS := $(patsubst ./%,%,$(SRCS))
-
-INCS := -I. -IappTimer -IsimulateLED
 
 RELEASE_DIR := release
 DEBUG_DIR := debug
 
+# Compilers and flags
 HOST_CC := gcc
 RPI_CC := aarch64-linux-gnu-gcc
+CFLAGS := -Wall -Wextra
+RELEASE_FLAGS := -O2
+DEBUG_FLAGS := -g -O0
+INCS := -I. -IappTimer -IsimulateLED
 
+# Executable names
 EXE := appTimerexecutable
 RPI_EXE := appTimerexecutable_rpi
 
-# Object and assembly files
-RELEASE_OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.o,$(REL_SRCS))
-DEBUG_OBJS := $(patsubst %.c,$(DEBUG_DIR)/%.o,$(REL_SRCS))
-RELEASE_ASMS := $(patsubst %.c,$(RELEASE_DIR)/%.s,$(REL_SRCS))
-DEBUG_ASMS := $(patsubst %.c,$(DEBUG_DIR)/%.s,$(REL_SRCS))
+# Object and assembly files (preserve subdirectory structure)
+OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.o,$(SRCS))
+ASMS := $(patsubst %.c,$(RELEASE_DIR)/%.s,$(SRCS))
+DBG_OBJS := $(patsubst %.c,$(DEBUG_DIR)/%.o,$(SRCS))
+DBG_ASMS := $(patsubst %.c,$(DEBUG_DIR)/%.s,$(SRCS))
+RPI_OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi.o,$(SRCS))
+RPI_ASMS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi.s,$(SRCS))
 
-RPI_RELEASE_OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi.o,$(REL_SRCS))
-RPI_DEBUG_OBJS := $(patsubst %.c,$(DEBUG_DIR)/%.rpi.o,$(REL_SRCS))
-RPI_RELEASE_ASMS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi.s,$(REL_SRCS))
-RPI_DEBUG_ASMS := $(patsubst %.c,$(DEBUG_DIR)/%.rpi.s,$(REL_SRCS))
+.PHONY: linux rpi debug all clean dirs
 
-# Pattern rules for objects and assembly with directory creation
-$(RELEASE_DIR)/%.o: %.c
-	mkdir -p $(dir $@)
-	$(HOST_CC) -Wall -Wextra $(INCS) -O2 -c $< -o $@
+dirs:
+	@mkdir -p $(RELEASE_DIR) $(DEBUG_DIR)
+	@for dir in $(SRC_DIRS); do mkdir -p $(RELEASE_DIR)/$$dir $(DEBUG_DIR)/$$dir; done
 
-$(DEBUG_DIR)/%.o: %.c
-	mkdir -p $(dir $@)
-	$(HOST_CC) -Wall -Wextra $(INCS) -g -c $< -o $@
+# Host build rules (release)
+$(RELEASE_DIR)/%.o: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(HOST_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) -c $< -o $@
 
-$(RELEASE_DIR)/%.s: %.c
-	mkdir -p $(dir $@)
-	$(HOST_CC) $(INCS) -S -O2 $< -o $@
+$(RELEASE_DIR)/%.s: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(HOST_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) -S $< -o $@
 
-$(DEBUG_DIR)/%.s: %.c
-	mkdir -p $(dir $@)
-	$(HOST_CC) $(INCS) -S -g $< -o $@
+# Host build rules (debug)
+$(DEBUG_DIR)/%.o: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(HOST_CC) $(CFLAGS) $(DEBUG_FLAGS) $(INCS) -c $< -o $@
 
-$(RELEASE_DIR)/%.rpi.o: %.c
-	mkdir -p $(dir $@)
-	$(RPI_CC) -Wall -Wextra $(INCS) -O2 -c $< -o $@
+$(DEBUG_DIR)/%.s: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(HOST_CC) $(CFLAGS) $(DEBUG_FLAGS) $(INCS) -S $< -o $@
 
-$(DEBUG_DIR)/%.rpi.o: %.c
-	mkdir -p $(dir $@)
-	$(RPI_CC) -Wall -Wextra $(INCS) -g -c $< -o $@
+# Raspberry Pi cross-build rules (release only)
+$(RELEASE_DIR)/%.rpi.o: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) -c $< -o $@
 
-$(RELEASE_DIR)/%.rpi.s: %.c
-	mkdir -p $(dir $@)
-	$(RPI_CC) $(INCS) -S -O2 $< -o $@
+$(RELEASE_DIR)/%.rpi.s: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) -S $< -o $@
 
-$(DEBUG_DIR)/%.rpi.s: %.c
-	mkdir -p $(dir $@)
-	$(RPI_CC) $(INCS) -S -g $< -o $@
+# Targets
+linux: $(OBJS) $(ASMS)
+	$(HOST_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(OBJS) -o $(RELEASE_DIR)/$(EXE)
 
-# Linking
-$(RELEASE_DIR)/$(EXE): $(RELEASE_OBJS)
-	$(HOST_CC) $(INCS) $^ -o $@
+debug: $(DBG_OBJS) $(DBG_ASMS)
+	$(HOST_CC) $(CFLAGS) $(DEBUG_FLAGS) $(INCS) $(DBG_OBJS) -o $(DEBUG_DIR)/$(EXE)
 
-$(DEBUG_DIR)/$(EXE): $(DEBUG_OBJS)
-	$(HOST_CC) $(INCS) $^ -o $@
+rpi: $(RPI_OBJS) $(RPI_ASMS)
+	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(RPI_OBJS) -o $(RELEASE_DIR)/$(RPI_EXE)
 
-$(RELEASE_DIR)/$(RPI_EXE): $(RPI_RELEASE_OBJS)
-	$(RPI_CC) $(INCS) $^ -o $@
-
-$(DEBUG_DIR)/$(RPI_EXE): $(RPI_DEBUG_OBJS)
-	$(RPI_CC) $(INCS) $^ -o $@
-
-.PHONY: linux linux-debug rpi rpi-debug all clean
-
-linux: $(RELEASE_DIR)/$(EXE) $(RELEASE_ASMS)
-linux-debug: $(DEBUG_DIR)/$(EXE) $(DEBUG_ASMS)
-rpi: $(RELEASE_DIR)/$(RPI_EXE) $(RPI_RELEASE_ASMS)
-rpi-debug: $(DEBUG_DIR)/$(RPI_EXE) $(RPI_DEBUG_ASMS)
 all: linux rpi
 
 clean:
