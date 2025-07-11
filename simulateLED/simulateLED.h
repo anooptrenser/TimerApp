@@ -19,8 +19,11 @@
 #define GPIO_CHIP_NAME    "gpiochip0"
 #define GPIO_PIN           17
 #define CONSUMER_LABEL    "TimerApp"
+#define LED_ON_DELAY      840
+#define LED_OFF_DELAY     532 
 #endif
 
+#define SIMULATION_DELAY  1000
 //***************************** Function Declarations *************************
 void RaspiGpioInit(void);
 void RaspiLedOn(void);

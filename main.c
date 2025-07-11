@@ -28,13 +28,13 @@ int main(void)
 #ifdef USE_RASPI
 
     RaspiGpioInit();
-    
+
     while (1)
     {
         RaspiLedOn();
-        DelayMilliseconds(840);
+        DelayMilliseconds(LED_ON_DELAY);
         RaspiLedOff();
-        DelayMilliseconds(532);
+        DelayMilliseconds(LED_OFF_DELAY);
     }
    
 #else
@@ -45,7 +45,7 @@ int main(void)
         printf("-------------------------\n"); // Separator for clarity
         DisplayLedStatus(); // Simulate LED ON/OFF
         fflush(stdout);
-        DelayMilliseconds(1000);
+        DelayMilliseconds(SIMULATION_DELAY);
     }
 #endif
 
