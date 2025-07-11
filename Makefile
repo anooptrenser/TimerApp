@@ -13,9 +13,14 @@ RELEASE_FLAGS := -O2
 DEBUG_FLAGS := -g -O0
 INCS := -I. -IappTimer -IsimulateLED
 
+# Raspberry Pi libgpiod paths
+RPI_GPIOD_INC := -I/opt/gpiod-v1-arm/include
+RPI_GPIOD_LIB := -L/opt/gpiod-v1-arm/lib -Wl,-rpath=/opt/gpiod-v1-arm/lib -lgpiod
+
 # Executable names
 EXE := appTimerexecutable
 RPI_EXE := appTimerexecutable_rpi
+RPI_LED_EXE := appTimerexecutable_rpi_led
 
 # Object and assembly files (preserve subdirectory structure)
 OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.o,$(SRCS))
@@ -24,8 +29,10 @@ DBG_OBJS := $(patsubst %.c,$(DEBUG_DIR)/%.o,$(SRCS))
 DBG_ASMS := $(patsubst %.c,$(DEBUG_DIR)/%.s,$(SRCS))
 RPI_OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi.o,$(SRCS))
 RPI_ASMS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi.s,$(SRCS))
+RPI_LED_OBJS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi-led.o,$(SRCS))
+RPI_LED_ASMS := $(patsubst %.c,$(RELEASE_DIR)/%.rpi-led.s,$(SRCS))
 
-.PHONY: linux rpi debug all clean dirs
+.PHONY: linux rpi rpi-led debug all clean dirs
 
 dirs:
 	@mkdir -p $(RELEASE_DIR) $(DEBUG_DIR)
@@ -58,6 +65,15 @@ $(RELEASE_DIR)/%.rpi.s: %.c | dirs
 	@mkdir -p $(dir $@)
 	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) -S $< -o $@
 
+# Raspberry Pi cross-build rules (with USE_RASPI)
+$(RELEASE_DIR)/%.rpi-led.o: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(RPI_GPIOD_INC) -DUSE_RASPI -c $< -o $@
+
+$(RELEASE_DIR)/%.rpi-led.s: %.c | dirs
+	@mkdir -p $(dir $@)
+	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(RPI_GPIOD_INC) -DUSE_RASPI -S $< -o $@
+
 # Targets
 linux: $(OBJS) $(ASMS)
 	$(HOST_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(OBJS) -o $(RELEASE_DIR)/$(EXE)
@@ -68,7 +84,10 @@ debug: $(DBG_OBJS) $(DBG_ASMS)
 rpi: $(RPI_OBJS) $(RPI_ASMS)
 	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(RPI_OBJS) -o $(RELEASE_DIR)/$(RPI_EXE)
 
-all: linux rpi
+rpi-led: $(RPI_LED_OBJS) $(RPI_LED_ASMS)
+	$(RPI_CC) $(CFLAGS) $(RELEASE_FLAGS) $(INCS) $(RPI_GPIOD_INC) -DUSE_RASPI $(RPI_LED_OBJS) $(RPI_GPIOD_LIB) -o $(RELEASE_DIR)/$(RPI_LED_EXE)
+
+all: linux rpi rpi-led
 
 clean:
 	rm -rf $(RELEASE_DIR) $(DEBUG_DIR)

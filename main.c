@@ -4,7 +4,7 @@
 //*****************************************************************************
 //
 // File     : main.c
-// Summary  : Displays real time of different zones
+// Summary  : Displays real time of different zones or blinks LED on RPi
 // Note     : None
 // Author   : Anoop G
 // Date     : 17/06/2025
@@ -16,16 +16,8 @@
 #include "appTimer.h"
 #include "simulateLED.h"
 
-//***************************** Local Types ***********************************
-
-//***************************** Local Constants *******************************
-
-//***************************** Local Variables *******************************
-
-//***************************** Local Functions *******************************
-
 //*****************************.main.******************************************
-// Purpose   : Display time of all zones
+// Purpose   : Display time of all zones or blink LED on RPi
 // Inputs    : None 
 // Outputs   : None
 // Return    : 0
@@ -33,6 +25,19 @@
 //*****************************************************************************
 int main(void)
 {
+#ifdef USE_RASPI
+
+    RaspiGpioInit();
+    
+    while (1)
+    {
+        RaspiLedOn();
+        DelayMilliseconds(840);
+        RaspiLedOff();
+        DelayMilliseconds(532);
+    }
+   
+#else
     while (1)
     {
         ClearScreen();
@@ -42,6 +47,7 @@ int main(void)
         fflush(stdout);
         DelayMilliseconds(1000);
     }
+#endif
 
     return 0;
 }
