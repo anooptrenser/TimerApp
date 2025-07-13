@@ -19,41 +19,24 @@ A cross-platform C project that builds a timer application for both Linux and Ra
 
 ## Building with Make
 
-### 1. Linux (Release)
+## Build release executable for host
+make linux
 
-$ make linux
+## Build debug executable for host
+make debug
 
-- Output: `release/appTimerexecutable`
+##Cross-compile for Raspberry Pi (no GPIO)
+make rpi
 
-### 2. Linux (Debug)
+## Cross-compile for Raspberry Pi with GPIO support
+make rpi-led
 
-$ make linux-debug
+## Build all targets
+make all
 
-- Output: `debug/appTimerexecutable`
+##Clean build artifacts
+make clean
 
-### 3. Raspberry Pi (Release, cross-compile)
-
-$ make rpi
-
-- Output: `release/appTimerexecutable_rpi`
-
-### 4. Raspberry Pi (Debug, cross-compile)
-
-$ make rpi-debug
-
-- Output: `debug/appTimerexecutable_rpi`
-
-### 5. Build All
-
-$ make all
-
-- Builds both Linux and Raspberry Pi release targets.
-
-### 6. Clean Build Artifacts
-
-$ make clean
-
-- Removes all files from `release/` and `debug/` folders.
 
 ## Building with CMake
 
