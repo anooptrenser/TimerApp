@@ -49,6 +49,13 @@ $ mkdir build
 $ cmake ..
 $ make
 
+## Execution of Sanity Check
+Place sanityCheck.sh in the project root (same directory as the Makefile).
+$chmod +x sanityCheck.sh
+./sanityCheck.sh
+
+On completion report.txt file will be generated.
+
 
 
 
