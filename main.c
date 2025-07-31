@@ -26,28 +26,26 @@
 int main(void)
 {
 #ifdef USE_RASPI
+    RaspiGpioInit();     
+#endif
 
-    RaspiGpioInit();
-
-    while (1)
-    {
-        RaspiLedOn();
-        DelayMilliseconds(LED_ON_DELAY);
-        RaspiLedOff();
-        DelayMilliseconds(LED_OFF_DELAY);
-    }
-   
-#else
     while (1)
     {
         ClearScreen();
         DisplayTimeAllZones();
         printf("-------------------------\n"); // Separator for clarity
+
+#ifdef USE_RASPI
+        RaspiLedOn();
+        DelayMilliseconds(LED_ON_DELAY);
+        RaspiLedOff();
+        DelayMilliseconds(LED_OFF_DELAY);
+#else
         DisplayLedStatus(); // Simulate LED ON/OFF
         fflush(stdout);
         DelayMilliseconds(SIMULATION_DELAY);
-    }
 #endif
+    }
 
     return 0;
 }
